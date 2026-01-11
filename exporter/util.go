@@ -27,9 +27,9 @@ import (
 	"text/template"
 
 	"github.com/Masterminds/sprig/v3"
-	"github.com/prometheus-community/json_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	pconfig "github.com/prometheus/common/config"
+	"github.com/vgrusdev/json_exporter/config"
 )
 
 func MakeMetricName(parts ...string) string {

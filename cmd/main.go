@@ -22,8 +22,6 @@ import (
 	"os"
 
 	"github.com/alecthomas/kingpin/v2"
-	"github.com/prometheus-community/json_exporter/config"
-	"github.com/prometheus-community/json_exporter/exporter"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/promslog"
@@ -31,6 +29,8 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/prometheus/exporter-toolkit/web"
 	"github.com/prometheus/exporter-toolkit/web/kingpinflag"
+	"github.com/vgrusdev/json_exporter/config"
+	"github.com/vgrusdev/json_exporter/exporter"
 )
 
 var (

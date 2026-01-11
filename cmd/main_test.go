@@ -22,9 +22,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/prometheus-community/json_exporter/config"
 	pconfig "github.com/prometheus/common/config"
 	"github.com/prometheus/common/promslog"
+	"github.com/vgrusdev/json_exporter/config"
 )
 
 func TestFailIfSelfSignedCA(t *testing.T) {

@@ -19,8 +19,8 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/prometheus-community/json_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/vgrusdev/json_exporter/config"
 	"k8s.io/client-go/util/jsonpath"
 )
 
