@@ -48,9 +48,11 @@ func (mc JSONMetricCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (mc JSONMetricCollector) Collect(ch chan<- prometheus.Metric) {
 	for _, m := range mc.JSONMetrics {
+		mc.Logger.Debug("mc.JSONMetrics loop", "m", m)
 		switch m.Type {
 		case config.ValueScrape:
 			value, err := extractValue(mc.Logger, mc.Data, m.KeyJSONPath, false)
+			mc.Logger.Debug("mc.JSONMetrics loop, ValueScrape", "value", value)
 			if err != nil {
 				mc.Logger.Error("Failed to extract value for metric", "path", m.KeyJSONPath, "err", err, "metric", m.Desc)
 				continue
@@ -71,6 +73,7 @@ func (mc JSONMetricCollector) Collect(ch chan<- prometheus.Metric) {
 
 		case config.ObjectScrape:
 			values, err := extractValue(mc.Logger, mc.Data, m.KeyJSONPath, true)
+			mc.Logger.Debug("mc.JSONMetrics loop, ObjectScrape", "values", values)
 			if err != nil {
 				mc.Logger.Error("Failed to extract json objects for metric", "err", err, "metric", m.Desc)
 				continue
@@ -78,13 +81,16 @@ func (mc JSONMetricCollector) Collect(ch chan<- prometheus.Metric) {
 
 			var jsonData []interface{}
 			if err := json.Unmarshal([]byte(values), &jsonData); err == nil {
+				mc.Logger.Debug("mc.JSONMetrics loop, ObjectScrape", "jsonData", jsonData)
 				for _, data := range jsonData {
+					mc.Logger.Debug("mc.JSONMetrics loop, ObjectScrape, jsonData", "data", data)
 					jdata, err := json.Marshal(data)
 					if err != nil {
 						mc.Logger.Error("Failed to marshal data to json", "path", m.ValueJSONPath, "err", err, "metric", m.Desc, "data", data)
 						continue
 					}
 					value, err := extractValue(mc.Logger, jdata, m.ValueJSONPath, false)
+					mc.Logger.Debug("mc.JSONMetrics loop, ObjectScrape, jsonData", "value", value)
 					if err != nil {
 						mc.Logger.Error("Failed to extract value for metric", "path", m.ValueJSONPath, "err", err, "metric", m.Desc)
 						continue
@@ -97,6 +103,7 @@ func (mc JSONMetricCollector) Collect(ch chan<- prometheus.Metric) {
 							floatValue,
 							extractLabels(mc.Logger, jdata, m.LabelsJSONPaths)...,
 						)
+						mc.Logger.Debug("mc.JSONMetrics loop, timestampMetric sending ", "metric", metric)
 						ch <- timestampMetric(mc.Logger, m, jdata, metric)
 					} else {
 						mc.Logger.Error("Failed to convert extracted value to float64", "path", m.ValueJSONPath, "value", value, "err", err, "metric", m.Desc)
